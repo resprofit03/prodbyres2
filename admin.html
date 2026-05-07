@@ -36,13 +36,6 @@
           <path d="M16 3.13a4 4 0 0 1 0 7.75" />
         </svg>
       </a>
-      <span class="sidebar__spacer"></span>
-      <a href="admin.html" class="nav-icon" aria-current="page" title="Админ">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <circle cx="12" cy="12" r="3" />
-          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
-        </svg>
-      </a>
     </aside>
 
     <div class="main-wrap">
@@ -62,7 +55,13 @@
       <main class="content">
         <section id="admin-login" class="admin-panel">
           <h2 class="page-title" style="font-size: 1.1rem">Вход</h2>
-          <p class="hint">Создайте пользователя в Supabase → Authentication → Users, затем войдите здесь.</p>
+          <p class="hint">
+            Страница доступна по адресу <strong>/admin</strong> (на Vercel) или <strong>admin.html</strong> локально. В меню сайта ссылки нет — только прямой вход.
+            Пользователь в Supabase должен совпадать с <code>adminEmail</code> в <code>js/config.js</code>.
+          </p>
+          <p class="hint">
+            Выполните в SQL Editor скрипт <code>supabase/rls-main-admin.sql</code>, чтобы только этот email мог менять галерею и загружать файлы.
+          </p>
           <form id="form-login" style="margin-top: 1rem">
             <div class="form-group">
               <label for="login-email">Email</label>

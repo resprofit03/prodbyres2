@@ -1,5 +1,6 @@
 /**
  * Админ: вход, загрузка работ (single / pack), удаление.
+ * Только email из PORTFOLIO_CONFIG.adminEmail считается главным админом.
  */
 (function () {
   var loginSection = document.getElementById("admin-login");
@@ -16,6 +17,39 @@
 
   function getClient() {
     return window.portfolioSupabase ? window.portfolioSupabase.getClient() : null;
+  }
+
+  function getAdminEmail() {
+    var c = window.PORTFOLIO_CONFIG;
+    return (c && c.adminEmail && String(c.adminEmail).trim().toLowerCase()) || "";
+  }
+
+  function sessionEmail(session) {
+    return ((session && session.user && session.user.email) || "")
+      .trim()
+      .toLowerCase();
+  }
+
+  function showAuthError(el, msg) {
+    if (!el) return;
+    el.textContent = msg || "";
+    el.hidden = !msg;
+  }
+
+  async function enforceAdminOrLogout(client, session) {
+    var want = getAdminEmail();
+    if (!session) return null;
+    if (!want) return session;
+    if (sessionEmail(session) === want) return session;
+    await client.auth.signOut();
+    loginSection.hidden = false;
+    appSection.hidden = true;
+    if (authStatus) authStatus.textContent = "";
+    showAuthError(
+      loginError,
+      "Этот аккаунт не главный администратор. Войдите как " + want + "."
+    );
+    return null;
   }
 
   async function refreshSession() {
@@ -38,6 +72,9 @@
       return null;
     }
 
+    session = await enforceAdminOrLogout(client, session);
+    if (!session) return null;
+
     loginSection.hidden = true;
     appSection.hidden = false;
     if (authStatus) {
@@ -58,9 +95,7 @@
     workList.innerHTML = '<li class="hint">Загрузка списка…</li>';
     var res = await client
       .from("works")
-      .select(
-        "id,title,item_type,created_at,work_images(id)"
-      )
+      .select("id,title,item_type,created_at,work_images(id)")
       .order("created_at", { ascending: false });
 
     if (res.error) {
@@ -115,11 +150,17 @@
 
     var email = document.getElementById("login-email").value.trim();
     var password = document.getElementById("login-password").value;
-    var res = await client.auth.signInWithPassword({ email: email, password: password });
+    var res = await client.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
     if (res.error) {
       showAuthError(loginError, res.error.message);
       return;
     }
+    var sess = res.data.session;
+    var ok = await enforceAdminOrLogout(client, sess);
+    if (!ok) return;
     await refreshSession();
     loadWorks();
   });
@@ -130,12 +171,6 @@
       if (client) await client.auth.signOut();
       await refreshSession();
     });
-  }
-
-  function showAuthError(el, msg) {
-    if (!el) return;
-    el.textContent = msg || "";
-    el.hidden = !msg;
   }
 
   function showFormError(msg) {
@@ -150,8 +185,9 @@
 
     var client = getClient();
     var session = (await client.auth.getSession()).data.session;
+    session = await enforceAdminOrLogout(client, session);
     if (!client || !session) {
-      showFormError("Сессия истекла. Войдите снова.");
+      showFormError("Сессия истекла или нет доступа. Войдите снова.");
       return;
     }
 
@@ -169,7 +205,9 @@
     }
 
     if (itemType === "single" && files.length > 1) {
-      showFormError('Для типа «Одна картинка» загрузите один файл или выберите тип «Пак».');
+      showFormError(
+        'Для типа «Одна картинка» загрузите один файл или выберите тип «Пак».'
+      );
       return;
     }
 
@@ -232,18 +270,20 @@
     loadWorks();
   });
 
+  var emInput = document.getElementById("login-email");
+  var ae = getAdminEmail();
+  if (emInput && ae) emInput.value = ae;
+
   refreshSession().then(function (s) {
     if (s) loadWorks();
   });
 
-  if (typeof window !== "undefined" && window.supabase) {
-    var client = getClient();
-    if (client) {
-      client.auth.onAuthStateChange(function () {
-        refreshSession().then(function (s) {
-          if (s) loadWorks();
-        });
+  var client = getClient();
+  if (client) {
+    client.auth.onAuthStateChange(function () {
+      refreshSession().then(function (s) {
+        if (s) loadWorks();
       });
-    }
+    });
   }
 })();

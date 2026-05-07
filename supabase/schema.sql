@@ -36,7 +36,7 @@ create policy "work_images_select_public"
   on public.work_images for select
   using (true);
 
--- Запись только авторизованным (ваш аккаунт админа в Authentication)
+-- Запись только авторизованным (для одного главного админа по email см. supabase/rls-main-admin.sql)
 create policy "works_insert_authenticated"
   on public.works for insert
   with check (auth.role() = 'authenticated');

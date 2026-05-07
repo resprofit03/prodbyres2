@@ -15,9 +15,11 @@
 1. Создайте проект на [supabase.com](https://supabase.com).  
 2. **SQL Editor** → выполните `supabase/schema.sql`, затем `supabase/storage.sql`.  
 3. **Authentication** → включите Email; создайте пользователя (ваш админ).  
-4. В **Settings → API** скопируйте Project URL и `anon` key в `js/config.js`.  
+4. В **Settings → API** скопируйте Project URL и `anon` key в `js/config.js` и укажите **один** email админа в `adminEmail` (тот же, что в Supabase Auth).  
 
-Чтение галереи доступно всем; создавать и удалять работы может только **вошедший** пользователь (RLS `authenticated`).
+5. В **SQL Editor** выполните **`supabase/rls-main-admin.sql`** (после `schema.sql` и `storage.sql`): запись в таблицы и загрузка в Storage будут только у этого email.  
+
+Чтение галереи доступно всем. Панель **/admin** в боковом меню не показывается — открывайте сайт.ваш-домен/admin вручную. После входа сессия сохраняется: при следующем заходе на `/admin` сразу откроется панель.
 
 ## Локальный просмотр
 
