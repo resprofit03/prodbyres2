@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Цены — Портфолио</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Навигация">
+      <a href="index.html" class="sidebar__brand" aria-label="На главную">P</a>
+      <a href="index.html" class="nav-icon" title="Главная">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+      </a>
+      <a href="price.html" class="nav-icon" aria-current="page" title="Цены">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <line x1="12" y1="1" x2="12" y2="23" />
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+        </svg>
+      </a>
+      <a href="contacts.html" class="nav-icon" title="Контакты">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+          <polyline points="22,6 12,13 2,6" />
+        </svg>
+      </a>
+      <a href="clients.html" class="nav-icon" title="Клиенты">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </svg>
+      </a>
+      <span class="sidebar__spacer"></span>
+      <a href="admin.html" class="nav-icon" title="Админ">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="3" />
+          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+        </svg>
+      </a>
+    </aside>
+
+    <div class="main-wrap">
+      <header class="top-bar">
+        <div class="top-bar__inner">
+          <h1 class="page-title">Цены</h1>
+          <p class="page-sub">Укажите свои услуги и стоимость</p>
+          <nav class="tabs" aria-label="Разделы">
+            <a href="index.html">Все</a>
+            <a href="price.html" aria-current="page">Цены</a>
+            <a href="contacts.html">Контакты</a>
+            <a href="clients.html">Клиенты</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="content prose">
+        <p>Здесь можно расписать пакеты: превью YouTube, оформление соцсетей, монтаж и т.д.</p>
+        <table class="price-table">
+          <thead>
+            <tr>
+              <th>Услуга</th>
+              <th>Срок</th>
+              <th>Цена</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Превью / обложка</td>
+              <td>1–2 дня</td>
+              <td>от …</td>
+            </tr>
+            <tr>
+              <td>Пак визуалов (несколько кадров)</td>
+              <td>по договорённости</td>
+              <td>от …</td>
+            </tr>
+            <tr>
+              <td>Монтаж ролика</td>
+              <td>…</td>
+              <td>от …</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="hint">Отредактируйте таблицу в <code>price.html</code> под себя или позже вынесите в Supabase.</p>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
