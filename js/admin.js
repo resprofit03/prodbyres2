@@ -14,6 +14,8 @@
   var authStatus = document.getElementById("admin-auth-status");
   var loginError = document.getElementById("login-error");
   var formError = document.getElementById("form-error");
+  var formSuccess = document.getElementById("form-success");
+  var btnWorkSubmit = document.getElementById("btn-work-submit");
 
   function getClient() {
     return window.portfolioSupabase ? window.portfolioSupabase.getClient() : null;
@@ -174,100 +176,171 @@
   }
 
   function showFormError(msg) {
+    if (formSuccess) {
+      formSuccess.textContent = "";
+      formSuccess.hidden = true;
+    }
     if (!formError) return;
     formError.textContent = msg || "";
     formError.hidden = !msg;
+    if (msg) {
+      try {
+        console.error("[admin]", msg);
+      } catch (ignore) {}
+      if (formError.scrollIntoView) formError.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }
+
+  function showFormSuccess(msg) {
+    if (formError) {
+      formError.textContent = "";
+      formError.hidden = true;
+    }
+    if (!formSuccess) return;
+    formSuccess.textContent = msg || "";
+    formSuccess.hidden = !msg;
   }
 
   formWork.addEventListener("submit", async function (e) {
     e.preventDefault();
     showFormError("");
+    showFormSuccess("");
 
-    var client = getClient();
-    var session = (await client.auth.getSession()).data.session;
-    session = await enforceAdminOrLogout(client, session);
-    if (!client || !session) {
-      showFormError("Сессия истекла или нет доступа. Войдите снова.");
-      return;
-    }
-
-    var title = document.getElementById("work-title").value.trim();
-    var itemType = document.getElementById("work-type").value;
-    var orderRaw = document.getElementById("work-order").value;
-    var displayOrder = parseInt(orderRaw, 10);
-    if (isNaN(displayOrder)) displayOrder = 0;
-
-    var filesInput = document.getElementById("work-files");
-    var files = filesInput.files ? Array.from(filesInput.files) : [];
-    if (!files.length) {
-      showFormError("Выберите хотя бы одно изображение.");
-      return;
-    }
-
-    if (itemType === "single" && files.length > 1) {
-      showFormError(
-        'Для типа «Одна картинка» загрузите один файл или выберите тип «Пак».'
-      );
-      return;
-    }
-
-    var workIns = await client
-      .from("works")
-      .insert({
-        title: title,
-        item_type: itemType,
-        display_order: displayOrder,
-      })
-      .select("id")
-      .single();
-
-    if (workIns.error) {
-      showFormError(workIns.error.message);
-      return;
-    }
-
-    var workId = workIns.data.id;
-    var uid = session.user.id;
-    var sortIdx = 0;
-
-    for (var i = 0; i < files.length; i++) {
-      var file = files[i];
-      var path =
-        uid +
-        "/" +
-        crypto.randomUUID() +
-        "_" +
-        safeFileName(file.name || "image");
-
-      var up = await client.storage.from("portfolio").upload(path, file, {
-        cacheControl: "3600",
-        upsert: false,
-      });
-
-      if (up.error) {
-        await client.from("works").delete().eq("id", workId);
-        showFormError("Загрузка файла: " + up.error.message);
-        return;
-      }
-
-      var pub = client.storage.from("portfolio").getPublicUrl(path);
-      var url = pub.data.publicUrl;
-
-      var imgIns = await client.from("work_images").insert({
-        work_id: workId,
-        public_url: url,
-        storage_path: path,
-        sort_order: sortIdx++,
-      });
-
-      if (imgIns.error) {
-        showFormError("Сохранение URL: " + imgIns.error.message);
-        return;
+    function setBusy(busy) {
+      if (btnWorkSubmit) {
+        btnWorkSubmit.disabled = !!busy;
+        btnWorkSubmit.textContent = busy ? "Загрузка…" : "Загрузить";
       }
     }
 
-    formWork.reset();
-    loadWorks();
+    setBusy(true);
+
+    try {
+      var client = getClient();
+      if (!client) {
+        showFormError("Проверьте js/config.js (URL и ключ Supabase).");
+        alert("Нет клиента Supabase.");
+        return;
+      }
+      var session = (await client.auth.getSession()).data.session;
+      session = await enforceAdminOrLogout(client, session);
+      if (!client || !session) {
+        showFormError("Сессия истекла или нет доступа. Войдите снова.");
+        return;
+      }
+
+      var title = document.getElementById("work-title").value.trim();
+      var itemType = document.getElementById("work-type").value;
+      var orderRaw = document.getElementById("work-order").value;
+      var displayOrder = parseInt(orderRaw, 10);
+      if (isNaN(displayOrder)) displayOrder = 0;
+
+      var filesInput = document.getElementById("work-files");
+      var files = filesInput.files ? Array.from(filesInput.files) : [];
+      if (!files.length) {
+        showFormError("Выберите хотя бы одно изображение.");
+        return;
+      }
+
+      if (itemType === "single" && files.length > 1) {
+        showFormError(
+          'Для типа «Одна картинка» загрузите один файл или выберите тип «Пак».'
+        );
+        return;
+      }
+
+      var workIns = await client
+        .from("works")
+        .insert({
+          title: title,
+          item_type: itemType,
+          display_order: displayOrder,
+        })
+        .select("id")
+        .single();
+
+      if (workIns.error) {
+        var em = workIns.error.message || "";
+        var hint =
+          /row-level security|rls|permission denied/i.test(em)
+            ? " Выполните в Supabase обновлённый supabase/rls-main-admin.sql."
+            : "";
+        showFormError(em + hint);
+        alert("Не сохранилось: " + em);
+        return;
+      }
+
+      var workId = workIns.data.id;
+      var uid = session.user.id;
+      var sortIdx = 0;
+      var uploadedPaths = [];
+
+      for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        var path =
+          uid +
+          "/" +
+          crypto.randomUUID() +
+          "_" +
+          safeFileName(file.name || "image");
+
+        var up = await client.storage.from("portfolio").upload(path, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+        if (up.error) {
+          await client.from("works").delete().eq("id", workId);
+          var uem = "Загрузка файла: " + up.error.message;
+          showFormError(uem);
+          alert(uem);
+          return;
+        }
+
+        uploadedPaths.push(path);
+
+        var pub = client.storage.from("portfolio").getPublicUrl(path);
+        var url = pub.data && pub.data.publicUrl;
+        if (!url) {
+          await client.from("works").delete().eq("id", workId);
+          showFormError(
+            "Не удалось получить публичный URL. Проверьте bucket portfolio (должен быть public)."
+          );
+          alert("Нет public URL для файла в Storage.");
+          return;
+        }
+
+        var imgIns = await client.from("work_images").insert({
+          work_id: workId,
+          public_url: url,
+          storage_path: path,
+          sort_order: sortIdx++,
+        });
+
+        if (imgIns.error) {
+          await client.from("works").delete().eq("id", workId);
+          for (var j = 0; j < uploadedPaths.length; j++) {
+            try {
+              await client.storage.from("portfolio").remove([uploadedPaths[j]]);
+            } catch (ignore) {}
+          }
+          var iem = imgIns.error.message || "";
+          var ih =
+            /row-level security|rls|permission denied/i.test(iem)
+              ? " Выполните в Supabase обновлённый supabase/rls-main-admin.sql."
+              : "";
+          showFormError("Сохранение в БД: " + iem + ih);
+          alert("Сохранение в БД: " + iem);
+          return;
+        }
+      }
+
+      formWork.reset();
+      showFormSuccess("Готово. Обновите главную (F5) — карточка появится в сетке.");
+      loadWorks();
+    } finally {
+      setBusy(false);
+    }
   });
 
   var emInput = document.getElementById("login-email");
