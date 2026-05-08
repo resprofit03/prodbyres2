@@ -123,6 +123,8 @@
         im.src = row.public_url;
         im.alt = title;
         im.loading = "lazy";
+        im.decoding = "async";
+        im.setAttribute("fetchpriority", "low");
         pack.appendChild(im);
       });
       media.appendChild(pack);
@@ -131,6 +133,8 @@
       single.src = images[0].public_url;
       single.alt = title;
       single.loading = "lazy";
+      single.decoding = "async";
+      single.setAttribute("fetchpriority", "low");
       media.appendChild(single);
     }
 
@@ -226,14 +230,24 @@
     });
     urls = shuffle(urls);
 
+    // Кандидаты ограничиваем — нет смысла качать все 20+ картинок ради 3 hero-карточек.
+    var CANDIDATE_LIMIT = 10;
+    var candidates = urls.slice(0, CANDIDATE_LIMIT);
+
+    // Параллельная проверка пропорций — раньше шла последовательно и блокировала рендер на ~20с.
+    var ratios = await Promise.all(
+      candidates.map(function (item) {
+        return getImageRatio(item.src);
+      })
+    );
+
     var selected = [];
-    for (var i = 0; i < urls.length; i++) {
-      var ratio = await getImageRatio(urls[i].src);
-      if (ratio >= HERO_MIN_RATIO) selected.push(urls[i]);
+    for (var i = 0; i < candidates.length; i++) {
+      if (ratios[i] >= HERO_MIN_RATIO) selected.push(candidates[i]);
     }
     if (selected.length < 3) {
-      for (var j = 0; j < urls.length && selected.length < 3; j++) {
-        if (selected.indexOf(urls[j]) === -1) selected.push(urls[j]);
+      for (var j = 0; j < candidates.length && selected.length < 3; j++) {
+        if (selected.indexOf(candidates[j]) === -1) selected.push(candidates[j]);
       }
     }
 
@@ -254,25 +268,29 @@
     if (heroTickerRaf) cancelAnimationFrame(heroTickerRaf);
     heroRailEl.innerHTML = "";
 
-    function createCard(item) {
+    function createCard(item, idx) {
       var card = document.createElement("div");
       card.className = "home-hero__shot";
       var image = document.createElement("img");
       image.className = "home-hero__shot-img";
       image.src = item.src;
       image.alt = item.title || "";
-      image.loading = "lazy";
+      // Первая порция hero-картинок выше первого экрана — грузим жадно.
+      // Дубликаты ленты могут грузиться лениво.
+      image.loading = idx < 3 ? "eager" : "lazy";
+      image.decoding = "async";
+      image.setAttribute("fetchpriority", idx < 3 ? "high" : "low");
       card.appendChild(image);
       return card;
     }
 
-    items.forEach(function (item) {
-      heroRailEl.appendChild(createCard(item));
+    items.forEach(function (item, i) {
+      heroRailEl.appendChild(createCard(item, i));
     });
 
-    // Duplicate sequence to make seamless loop with no visible gap.
-    items.forEach(function (item) {
-      heroRailEl.appendChild(createCard(item));
+    // Дубликат ленты для бесшовного цикла — индексы продолжаем, чтобы дубликаты грузились лениво.
+    items.forEach(function (item, i) {
+      heroRailEl.appendChild(createCard(item, items.length + i));
     });
 
     startHeroTicker();
@@ -328,7 +346,12 @@
       return !isClientTitle(row.title || "");
     });
     setupHero(rows);
-    await fillHeroImages(rows);
+
+    // КРИТИЧНО: не ждём hero-картинки. Раньше fillHeroImages последовательно качала
+    // все картинки ради определения пропорций — это давало ~20с пустоты на главной.
+    // Запускаем фоном, masonry рисуем сразу.
+    fillHeroImages(rows);
+
     masonryEl.innerHTML = "";
     masonryEl.removeAttribute("aria-busy");
     masonryEl.removeAttribute("aria-label");
