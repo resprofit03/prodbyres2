@@ -3,86 +3,107 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Цены — Портфолио</title>
-  <link rel="stylesheet" href="css/styles.css" />
+  <title>PRODBYRES — цены</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css?v=9" />
 </head>
-<body>
+<body class="dark-page">
+  <div class="app-chrome">
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="index.html" class="site-header__wordmark" aria-label="PRODBYRES — на главную"><span class="site-header__wordmark-text" aria-hidden="true"><span class="site-header__wordmark-prod">PROD</span><span class="site-header__wordmark-rest">BYRES</span></span></a>
+      <nav class="site-header__nav" aria-label="Навигация">
+        <a href="index.html" class="nav-link">Главная</a>
+        <a href="price.html" class="nav-link" aria-current="page">Цены</a>
+        <a href="contacts.html" class="nav-link">Контакты</a>
+        <a href="clients.html" class="nav-link">Клиенты</a>
+      </nav>
+      <button type="button" id="lang-switch" class="lang-switch" aria-label="Switch language">EN</button>
+    </div>
+  </header>
+
+  </div>
+
   <div class="app-shell">
-    <aside class="sidebar" aria-label="Навигация">
-      <a href="index.html" class="sidebar__brand" aria-label="На главную">P</a>
-      <a href="index.html" class="nav-icon" title="Главная">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-          <polyline points="9 22 9 12 15 12 15 22" />
-        </svg>
-      </a>
-      <a href="price.html" class="nav-icon" aria-current="page" title="Цены">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <line x1="12" y1="1" x2="12" y2="23" />
-          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-        </svg>
-      </a>
-      <a href="contacts.html" class="nav-icon" title="Контакты">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-          <polyline points="22,6 12,13 2,6" />
-        </svg>
-      </a>
-      <a href="clients.html" class="nav-icon" title="Клиенты">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-          <circle cx="9" cy="7" r="4" />
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-        </svg>
-      </a>
-    </aside>
-
     <div class="main-wrap">
-      <header class="top-bar">
-        <div class="top-bar__inner">
-          <h1 class="page-title">Цены</h1>
-          <p class="page-sub">Укажите свои услуги и стоимость</p>
-          <nav class="tabs" aria-label="Разделы">
-            <a href="index.html">Все</a>
-            <a href="price.html" aria-current="page">Цены</a>
-            <a href="contacts.html">Контакты</a>
-            <a href="clients.html">Клиенты</a>
-          </nav>
-        </div>
-      </header>
+      <main class="content pricing-page">
+        <div class="pricing-cards">
+          <article class="pricing-tier">
+            <h3 class="pricing-tier__name">Превью / обложка</h3>
+            <p class="pricing-tier__lead">Статичное оформление для видео</p>
+            <div class="pricing-tier__price-wrap">
+              <span class="pricing-tier__amount pricing-tier__amount--with-subline">
+                $10
+                <small>или 450 ГРН</small>
+              </span>
+            </div>
+            <ul class="pricing-tier__list">
+              <li>
+                <span class="pricing-check" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.25" stroke="currentColor" stroke-width="1.35"/><path d="M8 12.2 10.5 15 16 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span>1 превью / обложка для одного ролика</span>
+              </li>
+              <li>
+                <span class="pricing-check" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.25" stroke="currentColor" stroke-width="1.35"/><path d="M8 12.2 10.5 15 16 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span>Срок выполнения согласуем перед стартом</span>
+              </li>
+              <li>
+                <span class="pricing-check" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.25" stroke="currentColor" stroke-width="1.35"/><path d="M8 12.2 10.5 15 16 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span>1 раунд правок включён</span>
+              </li>
+            </ul>
+            <a class="pricing-tier__btn" href="contacts.html">Заказать превью</a>
+          </article>
 
-      <main class="content prose">
-        <p>Здесь можно расписать пакеты: превью YouTube, оформление соцсетей, монтаж и т.д.</p>
-        <table class="price-table">
-          <thead>
-            <tr>
-              <th>Услуга</th>
-              <th>Срок</th>
-              <th>Цена</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Превью / обложка</td>
-              <td>1–2 дня</td>
-              <td>от …</td>
-            </tr>
-            <tr>
-              <td>Пак визуалов (несколько кадров)</td>
-              <td>по договорённости</td>
-              <td>от …</td>
-            </tr>
-            <tr>
-              <td>Монтаж ролика</td>
-              <td>…</td>
-              <td>от …</td>
-            </tr>
-          </tbody>
-        </table>
-        <p class="hint">Отредактируйте таблицу в <code>price.html</code> под себя или позже вынесите в Supabase.</p>
+          <article class="pricing-tier pricing-tier--featured">
+            <h3 class="pricing-tier__name">Монтаж видео</h3>
+            <p class="pricing-tier__lead">Индивидуальный расчёт под задачу</p>
+            <div class="pricing-tier__price-wrap">
+              <span class="pricing-tier__amount pricing-tier__amount--custom">
+                цена обсуждается
+              </span>
+            </div>
+            <ul class="pricing-tier__list">
+              <li>
+                <span class="pricing-check pricing-check--on-accent" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.25" stroke="currentColor" stroke-width="1.35"/><path d="M8 12.2 10.5 15 16 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span>Цена зависит от длительности исходников</span>
+              </li>
+              <li>
+                <span class="pricing-check pricing-check--on-accent" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.25" stroke="currentColor" stroke-width="1.35"/><path d="M8 12.2 10.5 15 16 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span>Учитывается сложность монтажа</span>
+              </li>
+              <li>
+                <span class="pricing-check pricing-check--on-accent" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.25" stroke="currentColor" stroke-width="1.35"/><path d="M8 12.2 10.5 15 16 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span>Учитывается общий объём работы</span>
+              </li>
+            </ul>
+            <a class="pricing-tier__btn pricing-tier__btn--inverse" href="contacts.html">Обсудить монтаж</a>
+          </article>
+        </div>
+
+        <section class="pricing-payments" aria-label="Варианты оплаты">
+          <h2 class="pricing-payments__title">Оплата</h2>
+          <p class="pricing-payments__text">Оплата возможна в USD, в криптовалюте и в гривне (ГРН).</p>
+          <p class="pricing-payments__text pricing-payments__text--muted">Итоговая стоимость по монтажу обсуждается после ознакомления с материалом.</p>
+        </section>
       </main>
     </div>
   </div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/site-header.js"></script>
 </body>
 </html>

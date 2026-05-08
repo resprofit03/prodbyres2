@@ -3,64 +3,128 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Портфолио</title>
-  <link rel="stylesheet" href="css/styles.css" />
+  <title>PRODBYRES</title>
+  <link rel="stylesheet" href="css/styles.css?v=9" />
+  <style>
+    .home-hero__title .char {
+      display: inline-block !important;
+      transform-origin: 50% 100% !important;
+      animation: heroCharIn 0.9s cubic-bezier(0.22, 0.86, 0.31, 1) both !important;
+      will-change: transform, opacity, filter;
+    }
+    .home-hero__title .char.char--odd {
+      animation-name: heroCharInOdd !important;
+    }
+    @keyframes heroCharIn {
+      0% {
+        opacity: 0;
+        transform: translateY(110%) rotate(-8deg) scale(0.85);
+        filter: blur(10px);
+      }
+      55% {
+        opacity: 1;
+        transform: translateY(-6%) rotate(1.2deg) scale(1.02);
+        filter: blur(0);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) rotate(0) scale(1);
+        filter: blur(0);
+      }
+    }
+    @keyframes heroCharInOdd {
+      0% {
+        opacity: 0;
+        transform: translateY(110%) rotate(8deg) scale(0.85);
+        filter: blur(10px);
+      }
+      55% {
+        opacity: 1;
+        transform: translateY(-6%) rotate(-1.2deg) scale(1.02);
+        filter: blur(0);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) rotate(0) scale(1);
+        filter: blur(0);
+      }
+    }
+  </style>
 </head>
-<body>
+<body class="home-page">
+  <div class="app-chrome">
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="index.html" class="site-header__wordmark" aria-label="PRODBYRES — на главную"><span class="site-header__wordmark-text" aria-hidden="true"><span class="site-header__wordmark-prod">PROD</span><span class="site-header__wordmark-rest">BYRES</span></span></a>
+      <nav class="site-header__nav" aria-label="Навигация">
+        <a href="index.html" class="nav-link" aria-current="page">Главная</a>
+        <a href="price.html" class="nav-link">Цены</a>
+        <a href="contacts.html" class="nav-link">Контакты</a>
+        <a href="clients.html" class="nav-link">Клиенты</a>
+      </nav>
+      <button type="button" id="lang-switch" class="lang-switch" aria-label="Switch language">EN</button>
+    </div>
+  </header>
+  </div>
+
   <div class="app-shell">
-    <aside class="sidebar" aria-label="Навигация">
-      <a href="index.html" class="sidebar__brand" aria-label="На главную">P</a>
-      <a href="index.html" class="nav-icon" aria-current="page" title="Главная">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-          <polyline points="9 22 9 12 15 12 15 22" />
-        </svg>
-      </a>
-      <a href="price.html" class="nav-icon" title="Цены">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <line x1="12" y1="1" x2="12" y2="23" />
-          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-        </svg>
-      </a>
-      <a href="contacts.html" class="nav-icon" title="Контакты">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-          <polyline points="22,6 12,13 2,6" />
-        </svg>
-      </a>
-      <a href="clients.html" class="nav-icon" title="Клиенты">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-          <circle cx="9" cy="7" r="4" />
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-        </svg>
-      </a>
-    </aside>
-
     <div class="main-wrap">
-      <header class="top-bar">
-        <div class="top-bar__inner">
-          <h1 class="page-title">Работы</h1>
-          <p class="page-sub">Дизайн, превью, монтаж — в сетке как в Pinterest</p>
-          <nav class="tabs" aria-label="Разделы">
-            <a href="index.html" aria-current="page">Все</a>
-            <a href="price.html">Цены</a>
-            <a href="contacts.html">Контакты</a>
-            <a href="clients.html">Клиенты</a>
-          </nav>
-        </div>
-      </header>
+      <main class="content content--home">
+        <h1 class="visually-hidden">Работы</h1>
+        <section class="home-hero">
+          <p class="home-hero__meta">Portfolio • 2026 • Graphic Design</p>
+          <h2 class="home-hero__title" aria-label="Portofolio">
+            <span class="home-hero__title-accent" aria-hidden="true"
+              ><span class="char char--odd" style="animation-delay:0.10s">P</span
+              ><span class="char" style="animation-delay:0.18s">o</span
+              ><span class="char char--odd" style="animation-delay:0.26s">r</span
+              ><span class="char" style="animation-delay:0.34s">t</span
+              ><span class="char char--odd" style="animation-delay:0.42s">o</span></span
+            ><span class="home-hero__title-rest" aria-hidden="true"
+              ><span class="char" style="animation-delay:0.50s">f</span
+              ><span class="char char--odd" style="animation-delay:0.58s">o</span
+              ><span class="char" style="animation-delay:0.66s">l</span
+              ><span class="char char--odd" style="animation-delay:0.74s">i</span
+              ><span class="char" style="animation-delay:0.82s">o</span></span>
+          </h2>
+          <p class="home-hero__lead">Creative covers, posters and design visuals.</p>
+          <div class="home-hero__chips" aria-hidden="true">
+            <span class="home-hero__chip home-hero__chip--accent">
+              <span class="home-hero__chip-pulse" aria-hidden="true"></span>
+              <strong id="home-works-count">—</strong>
+              <em id="home-works-label">работ</em>
+            </span>
+            <span class="home-hero__chip">2026</span>
+            <span class="home-hero__chip home-hero__chip--soft">Graphic&nbsp;Design</span>
+          </div>
+          <div class="home-hero__showcase">
+            <div id="home-hero-rail-track" class="home-hero__rail" aria-hidden="true"></div>
+          </div>
+        </section>
 
-      <main class="content">
+        <div class="home-section-head">
+          <span class="home-section-head__dot" aria-hidden="true"></span>
+          <p class="home-section-title">Selected works</p>
+          <span class="home-section-head__line" aria-hidden="true"></span>
+        </div>
         <div id="masonry" class="masonry" aria-live="polite"></div>
+
+        <section class="home-cta-section" aria-label="Связаться">
+          <p class="home-cta-section__lead">Есть проект?</p>
+          <a class="home-cta" href="contacts.html">
+            <span class="home-cta__text">Написать в Telegram</span>
+            <span class="home-cta__arrow" aria-hidden="true">→</span>
+          </a>
+        </section>
       </main>
     </div>
   </div>
 
+  <script src="js/i18n.js?v=7"></script>
+  <script src="js/site-header.js?v=7"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="js/config.js"></script>
-  <script src="js/supabase-client.js"></script>
-  <script src="js/gallery.js"></script>
+  <script src="js/config.js?v=7"></script>
+  <script src="js/supabase-client.js?v=7"></script>
+  <script src="js/gallery.js?v=7"></script>
 </body>
 </html>
