@@ -135,8 +135,10 @@
   function applyByPage(lang) {
     var t = DICT[lang];
     var page = location.pathname.toLowerCase();
+    // Vercel cleanUrls режет .html из URL — нормализуем для одинаковых проверок
+    if (page !== "/" && !/\.html$/.test(page)) page += ".html";
 
-    if (page.endsWith("/index.html") || page === "/" || page.endsWith("/portoflio")) {
+    if (page.endsWith("/index.html") || page === "/" || page.endsWith("/portoflio") || page.endsWith("/portoflio.html")) {
       setText(".home-hero__meta", t.index_meta);
       setText(".home-hero__lead", t.index_lead);
       setText(".home-section-title", t.index_selected);
